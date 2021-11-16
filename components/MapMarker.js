@@ -13,14 +13,19 @@ export default function MapMarker({ clusterer, markerData, isInfoOpen, isSelecte
     onClick(isOpen, markerData.id)
   }
 
-  const renderInfoWindow = markerId => {
+  const renderInfoWindow = () => {
     if (!isInfoOpen || !isSelected || !mapMarker) {
       return null
     }
 
     return (
       <InfoWindow anchor={mapMarker} onCloseClick={click}>
-        <div>I am Marker {markerId}</div>
+        <div>
+          <h2>{markerData.name}</h2>
+          <p>{markerData.status}</p>
+          <p>Население - {markerData.population}</p>
+          {markerData.year && <h3>Год основания - {markerData.year}</h3>}
+        </div>
       </InfoWindow>
     )
   }
@@ -31,11 +36,11 @@ export default function MapMarker({ clusterer, markerData, isInfoOpen, isSelecte
       onLoad={onLoad}
       onClick={click}
       position={{
-        lat: markerData.lat,
-        lng: markerData.lng
+        lat: parseFloat(markerData.lat),
+        lng: parseFloat(markerData.lng)
       }}
     >
-      {renderInfoWindow(markerData.id)}
+      {renderInfoWindow()}
     </Marker>
   )
 }
