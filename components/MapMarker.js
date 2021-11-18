@@ -23,7 +23,7 @@ export default function MapMarker({ clusterer, markerData, isInfoOpen, isSelecte
         <div>
           <h2>{markerData.name}</h2>
           <p>{markerData.status}</p>
-          <p>Население - {markerData.population}</p>
+          {markerData.population && <p>Население - {markerData.population}</p>}
           {markerData.year && <h3>Год основания - {markerData.year}</h3>}
         </div>
       </InfoWindow>
