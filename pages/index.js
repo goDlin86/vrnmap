@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { memo, useState, useEffect } from 'react'
 import { GoogleMap, LoadScript, MarkerClusterer } from '@react-google-maps/api'
 import MapMarker from '../components/MapMarker'
@@ -36,7 +37,13 @@ function Home() {
 
   return (
     <div className={styles.container}>
+      <Head>
+        <title>VrnMap</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
       <h1>Населенные пункты Воронежской области</h1>
+
       <LoadScript
         googleMapsApiKey='AIzaSyBR4bhA49ee391CkeeNQM4xb9rvH7fOdLg'
         mapIds={['acc1472a2dba089c']}
