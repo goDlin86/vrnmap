@@ -32,7 +32,7 @@ function Home() {
   }
 
   return (
-    <div class={styles.container}>
+    <div className={styles.container}>
       <h1>Населенные пункты Воронежской области</h1>
       <LoadScript
         googleMapsApiKey='AIzaSyBR4bhA49ee391CkeeNQM4xb9rvH7fOdLg'
