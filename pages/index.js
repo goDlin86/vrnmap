@@ -21,9 +21,12 @@ function Home() {
   const [isInfoOpen, setIsInfoOpen] = useState(false)
   const [selectedMarkerId, setSelectedMarkerId] = useState(null)
 
-  useEffect(async () => {
-    const data = await csv('data.csv')
-    setMarkers(data)
+  useEffect(() => {
+    async function fetchData() {
+      const data = await csv('data.csv')
+      setMarkers(data)
+    }
+    fetchData()
   }, [])
 
   const click = (isInfoOpen, selectedMarkerId) => {
