@@ -45,7 +45,7 @@ function Home() {
       <h1>Населенные пункты Воронежской области</h1>
 
       <LoadScript
-        googleMapsApiKey={process.env.GOOGLEMAPAPIKEY}
+        googleMapsApiKey='AIzaSyBR4bhA49ee391CkeeNQM4xb9rvH7fOdLg'
       >
         <GoogleMap
           mapContainerStyle={containerStyle}

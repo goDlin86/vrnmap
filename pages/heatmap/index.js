@@ -21,7 +21,11 @@ function Home() {
 
   const onLoad = async () => {
     const d = await csv('data.csv')
-    setData(d.map(i => new google.maps.LatLng(i.lat, i.lng)))
+    setData(
+      d.map(i => {
+        return { location: new google.maps.LatLng(i.lat, i.lng), weight: 1 }
+      })
+    )
   }
 
   return (
@@ -34,7 +38,7 @@ function Home() {
       <h1>Населенные пункты Воронежской области</h1>
 
       <LoadScript
-        googleMapsApiKey={process.env.GOOGLEMAPAPIKEY}
+        googleMapsApiKey='AIzaSyBR4bhA49ee391CkeeNQM4xb9rvH7fOdLg'
         libraries={["visualization"]}
         onLoad={onLoad}
       >
