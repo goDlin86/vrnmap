@@ -16,6 +16,8 @@ const center = {
   lng: 40.9
 }
 
+const libraries = ['visualization']
+
 function Home() {
   const [data, setData] = useState([])
 
@@ -38,15 +40,15 @@ function Home() {
       <h1>Населенные пункты Воронежской области</h1>
 
       <LoadScript
-        googleMapsApiKey='AIzaSyBR4bhA49ee391CkeeNQM4xb9rvH7fOdLg'
-        libraries={["visualization"]}
+        googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLEMAPAPIKEY}
+        libraries={libraries}
         onLoad={onLoad}
       >
         <GoogleMap
           mapContainerStyle={containerStyle}
           center={center}
           zoom={8}
-          options={{ mapId: 'acc1472a2dba089c' }}
+          options={{ mapId: process.env.NEXT_PUBLIC_GOOGLEMAPID }}
         >
 
           <HeatmapLayer data={data} />
