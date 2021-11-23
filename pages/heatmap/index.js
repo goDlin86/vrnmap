@@ -25,7 +25,8 @@ function Home() {
     const d = await csv('data.csv')
     setData(
       d.map(i => {
-        return { location: new google.maps.LatLng(i.lat, i.lng), weight: 1 }
+        const weight = Math.min(i.population / 100, 50)
+        return { location: new google.maps.LatLng(i.lat, i.lng), weight }
       })
     )
   }
@@ -51,7 +52,7 @@ function Home() {
           options={{ mapId: process.env.NEXT_PUBLIC_GOOGLEMAPID }}
         >
 
-          <HeatmapLayer data={data} />
+          <HeatmapLayer data={data} options={{ radius: 30 }} />
           
         </GoogleMap>
       </LoadScript>
