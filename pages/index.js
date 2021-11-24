@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { memo, useState, useEffect } from 'react'
-import { GoogleMap, LoadScript, MarkerClusterer } from '@react-google-maps/api'
+import { GoogleMap, LoadScript, MarkerClusterer, HeatmapLayer } from '@react-google-maps/api'
 import MapMarker from '../components/MapMarker'
 
 import { csv } from 'd3-fetch'
@@ -9,7 +9,7 @@ import styles from '../styles/Home.module.css'
 
 const containerStyle = {
   width: '100%',
-  height: '90vh'
+  height: '80vh'
 }
 
 const center = {
@@ -17,18 +17,28 @@ const center = {
   lng: 40.9
 }
 
+const libraries = ['visualization']
+
 function Home() {
   const [markers, setMarkers] = useState([])
   const [isInfoOpen, setIsInfoOpen] = useState(false)
   const [selectedMarkerId, setSelectedMarkerId] = useState(null)
 
-  useEffect(() => {
-    async function fetchData() {
-      const data = await csv('data.csv')
-      setMarkers(data)
-    }
-    fetchData()
-  }, [])
+  const [heatmap, setHeatmap] = useState([])
+
+  const [markersVisible, setMarkersVisible] = useState(true)
+  const [heatmapVisible, setHeatmapVisible] = useState(false)
+
+  const onLoad = async () => {
+    const data = await csv('data.csv')
+    setMarkers(data)
+    setHeatmap(
+      data.map(i => {
+        const weight = Math.min(i.population / 100, 50)
+        return { location: new google.maps.LatLng(i.lat, i.lng), weight }
+      })
+    )
+  }
 
   const click = (isInfoOpen, selectedMarkerId) => {
     setIsInfoOpen(isInfoOpen)
@@ -43,9 +53,27 @@ function Home() {
       </Head>
 
       <h1>Населенные пункты Воронежской области</h1>
+      <div className={styles.labels}>
+        <label>
+          <input type="checkbox"
+            checked={markersVisible}
+            onChange={() => setMarkersVisible(!markersVisible)}
+          />
+          Markers
+        </label>
+        <label>
+          <input type="checkbox"
+            checked={heatmapVisible}
+            onChange={() => setHeatmapVisible(!heatmapVisible)}
+          />
+          Heatmap
+        </label>
+      </div>
 
       <LoadScript
         googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLEMAPAPIKEY}
+        libraries={libraries}
+        onLoad={onLoad}
       >
         <GoogleMap
           mapContainerStyle={containerStyle}
@@ -54,7 +82,7 @@ function Home() {
           options={{ mapId: process.env.NEXT_PUBLIC_GOOGLEMAPID }}
         >
 
-          <MarkerClusterer averageCenter enableRetinaIcons gridSize={60}>
+          {markersVisible && <MarkerClusterer averageCenter enableRetinaIcons gridSize={30}>
             {clusterer =>
               markers.map(markerData => (
                 <MapMarker
@@ -67,7 +95,9 @@ function Home() {
                 />
               ))
             }
-          </MarkerClusterer>
+          </MarkerClusterer>}
+
+          {heatmapVisible && <HeatmapLayer data={heatmap} options={{ radius: 30 }} />}
           
         </GoogleMap>
       </LoadScript>
