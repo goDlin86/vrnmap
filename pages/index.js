@@ -82,7 +82,7 @@ function Home() {
           options={{ mapId: process.env.NEXT_PUBLIC_GOOGLEMAPID }}
         >
 
-          {markersVisible && <MarkerClusterer averageCenter enableRetinaIcons gridSize={30}>
+          {markersVisible && <MarkerClusterer averageCenter enableRetinaIcons gridSize={40}>
             {clusterer =>
               markers.map(markerData => (
                 <MapMarker
