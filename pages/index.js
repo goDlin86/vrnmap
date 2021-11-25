@@ -1,7 +1,7 @@
 import Head from 'next/head'
-import { memo, useState, useEffect } from 'react'
+import { memo, useState } from 'react'
 import { GoogleMap, LoadScript, MarkerClusterer, HeatmapLayer } from '@react-google-maps/api'
-import MapMarker from '../components/MapMarker'
+import Markers from '../components/Markers'
 
 import { csv } from 'd3-fetch'
 
@@ -21,9 +21,6 @@ const libraries = ['visualization']
 
 function Home() {
   const [markers, setMarkers] = useState([])
-  const [isInfoOpen, setIsInfoOpen] = useState(false)
-  const [selectedMarkerId, setSelectedMarkerId] = useState(null)
-
   const [heatmap, setHeatmap] = useState([])
 
   const [markersVisible, setMarkersVisible] = useState(true)
@@ -38,11 +35,6 @@ function Home() {
         return { location: new google.maps.LatLng(i.lat, i.lng), weight }
       })
     )
-  }
-
-  const click = (isInfoOpen, selectedMarkerId) => {
-    setIsInfoOpen(isInfoOpen)
-    setSelectedMarkerId(selectedMarkerId)
   }
 
   return (
@@ -82,21 +74,7 @@ function Home() {
           options={{ mapId: process.env.NEXT_PUBLIC_GOOGLEMAPID }}
         >
 
-          {markersVisible && <MarkerClusterer averageCenter enableRetinaIcons gridSize={40}>
-            {clusterer =>
-              markers.map(markerData => (
-                <MapMarker
-                  key={markerData.id}
-                  clusterer={clusterer}
-                  markerData={markerData}
-                  isSelected={markerData.id === selectedMarkerId}
-                  isInfoOpen={markerData.id === selectedMarkerId && isInfoOpen}
-                  onClick={click}
-                />
-              ))
-            }
-          </MarkerClusterer>}
-
+          {markersVisible && <Markers data={markers} />}
           {heatmapVisible && <HeatmapLayer data={heatmap} options={{ radius: 30 }} />}
           
         </GoogleMap>
