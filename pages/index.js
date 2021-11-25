@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { memo, useState } from 'react'
-import { GoogleMap, LoadScript, MarkerClusterer, HeatmapLayer } from '@react-google-maps/api'
+import { GoogleMap, LoadScript, HeatmapLayer, Circle } from '@react-google-maps/api'
 import Markers from '../components/Markers'
 
 import { csv } from 'd3-fetch'
@@ -19,12 +19,31 @@ const center = {
 
 const libraries = ['visualization']
 
+const circleOptions = {
+  strokeColor: '#FF0000',
+  strokeOpacity: 0.8,
+  strokeWeight: 2,
+  fillColor: '#FF0000',
+  fillOpacity: 0.35,
+  center: {
+    lat: 50.9,
+    lng: 40.9
+  },
+  radius: 3000,
+  clickable: false,
+  draggable: false,
+  editable: false,
+  visible: true,
+  zIndex: 1,
+}
+
 function Home() {
   const [markers, setMarkers] = useState([])
   const [heatmap, setHeatmap] = useState([])
 
   const [markersVisible, setMarkersVisible] = useState(true)
   const [heatmapVisible, setHeatmapVisible] = useState(false)
+  const [circlesVisible, setCirclesVisible] = useState(false)
 
   const onLoad = async () => {
     const data = await csv('data.csv')
@@ -51,14 +70,21 @@ function Home() {
             checked={markersVisible}
             onChange={() => setMarkersVisible(!markersVisible)}
           />
-          Markers
+          Маркеры
         </label>
         <label>
           <input type="checkbox"
             checked={heatmapVisible}
             onChange={() => setHeatmapVisible(!heatmapVisible)}
           />
-          Heatmap
+          Тепловая карта
+        </label>
+        <label>
+          <input type="checkbox"
+            checked={circlesVisible}
+            onChange={() => setCirclesVisible(!circlesVisible)}
+          />
+          Население
         </label>
       </div>
 
@@ -76,6 +102,7 @@ function Home() {
 
           {markersVisible && <Markers data={markers} />}
           {heatmapVisible && <HeatmapLayer data={heatmap} options={{ radius: 30 }} />}
+          {circlesVisible && <Circle options={circleOptions} />}
           
         </GoogleMap>
       </LoadScript>

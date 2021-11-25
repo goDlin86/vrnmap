@@ -39,6 +39,7 @@ export default function MapMarker({ clusterer, markerData, isInfoOpen, isSelecte
         lat: parseFloat(markerData.lat),
         lng: parseFloat(markerData.lng)
       }}
+      label={markerData.population}
     >
       {renderInfoWindow()}
     </Marker>
