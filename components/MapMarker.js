@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import { InfoWindow, Marker } from '@react-google-maps/api'
+import millify from 'millify'
+
+import styles from '../styles/Home.module.css'
 
 export default function MapMarker({ clusterer, markerData, isInfoOpen, isSelected, onClick }) {
   const [mapMarker, setMapMarker] = useState(null)
@@ -39,7 +42,7 @@ export default function MapMarker({ clusterer, markerData, isInfoOpen, isSelecte
         lat: parseFloat(markerData.lat),
         lng: parseFloat(markerData.lng)
       }}
-      label={markerData.population}
+      label={{ text: markerData.population ? millify(markerData.population) : 0, fontSize: '10px' }}
     >
       {renderInfoWindow()}
     </Marker>
